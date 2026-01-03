@@ -4,9 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 // Database connection
-// import { connectToDatabase } from "./db/dbConnection.ts"
-
-// connectToDatabase();
+import connectDb from './database/configDb';
+connectDb();
 const app = express();
 
 app.use(cors());
@@ -15,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send(`Hello ${req.query.name || 'World' }`);
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
