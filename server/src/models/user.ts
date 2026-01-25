@@ -26,6 +26,14 @@ const UserSchema = new mongoose.Schema(
       minlength: 8,
       select: false, // 👈 IMPORTANT (security)
     },
+    avatar:{
+      type: String,
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
+    
   },
   { timestamps: true }
 );

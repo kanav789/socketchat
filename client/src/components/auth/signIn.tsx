@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignIn = ({ login }: any) => {
+ 
+
+
 
     console.log("SignIn component rendered");
 
@@ -12,6 +16,8 @@ const SignIn = ({ login }: any) => {
             <input placeholder="Password" type="password" className="w-full mb-4 p-3 border rounded-lg" />
             <button onClick={login} className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold">Sign In</button>
             <p className="text-center mt-4 text-sm">Don’t have an account? <Link to="/signup" className="text-indigo-600">Sign Up</Link></p>
+
+          
         </div>
     </div>
     );
