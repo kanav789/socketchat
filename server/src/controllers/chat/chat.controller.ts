@@ -1,15 +1,12 @@
-import { group } from "node:console";
 import chat from "../../models/chat.model";
 import { Response, Request } from "express";
 
-
 export class ChatController {
 
-    // get all chats of specfic user 
-
+    // get all chats of specific user 
     public getallchats = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const userId = req.user?._id;
+            const userId = req?.user?._id;
             if (!userId) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
@@ -17,7 +14,7 @@ export class ChatController {
             const chats = await chat.find({
                 users: userId
             })
-                .populate("users",)
+                .populate("users")
                 .populate("groupAdmin")
                 .populate({
                     path: "latestMessage",
@@ -32,18 +29,15 @@ export class ChatController {
                 chats
             });
 
-
         } catch (error) {
             console.error("Error fetching chats:", error);
             return res.status(500).json({
                 message: "An error occurred",
-            })
+            });
         }
     }
 
-
     // get one to one chat 
-
     public accessOneToOneChat = async (req: Request, res: Response): Promise<Response> => {
         try {
             const { userId } = req.body;
@@ -55,7 +49,6 @@ export class ChatController {
                 return res.status(400).json({ message: "userId is required" });
             }
 
-
             // check if chat already exists
             let existchat = await chat.findOne({
                 isGroupChat: false,
@@ -63,33 +56,37 @@ export class ChatController {
             })
                 .populate("users", "-password")
                 .populate("latestMessage");
+            
             if (existchat) {
                 return res.status(200).json({
                     message: "Chat fetched successfully",
                     chat: existchat
                 });
             }
-            // create new chat
-            const newChat = await chat.creat({
+            
+            // create new chat (FIXED: creat -> create)
+            const newChat = await chat.create({
                 isGroupChat: false,
                 users: [currentUserId, userId]
             });
+            
             const fullChat = await chat.findById(newChat._id)
                 .populate("users", "-password");
 
-            return res.status(201).json({ message: "Chat created successfully", chat: fullChat });
+            return res.status(201).json({ 
+                message: "Chat created successfully", 
+                chat: fullChat 
+            });
 
+        } catch (error) {
+            console.error("accessOneToOneChat error:", error);
+            return res.status(500).json({ 
+                message: "Failed to access chat" 
+            });
         }
-        catch (error) {
-
-        }
-
     }
 
-
-
     // create a group chat
-
     public createGroupChat = async (req: Request, res: Response): Promise<Response> => {
         try {
             const { chatName, users } = req.body;
@@ -103,6 +100,7 @@ export class ChatController {
             if (users.length < 2) {
                 return res.status(400).json({ message: "At least 2 users are required to create a group chat" });
             }
+            
             // add creator to the users list
             users.push(currentUserId);
 
@@ -113,17 +111,22 @@ export class ChatController {
                 groupAdmin: currentUserId
             });
 
-            const fullyGroupChat = await chat.findById(newGroupChat._id).populate("users", "-password").populate("groupAdmin", "-password");
+            const fullyGroupChat = await chat.findById(newGroupChat._id)
+                .populate("users", "-password")
+                .populate("groupAdmin", "-password");
 
-            return res.status(201).json({ message: "Group chat created successfully", chat: fullyGroupChat });
+            return res.status(201).json({ 
+                message: "Group chat created successfully", 
+                chat: fullyGroupChat 
+            });
 
         } catch (error) {
             console.error("Error creating group chat:", error);
-            return res.status(500).json({ message: "An error occurred while creating group chat" });
+            return res.status(500).json({ 
+                message: "An error occurred while creating group chat" 
+            });
         }
-
     }
-
 
     // add users to group chat 
     public addToGroupChat = async (req: Request, res: Response): Promise<Response> => {
@@ -133,11 +136,18 @@ export class ChatController {
             if (!currentUserId) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
+            
             // check if the requester is admin
             const groupChat = await chat.findById(chatId);
-            if (groupChat?.groupAdmin.toString() !== currentUserId.toString()) {
+            if (!groupChat) {
+                return res.status(404).json({ message: "Chat not found" });
+            }
+            
+            // FIXED: Added null check for groupAdmin
+            if (!groupChat.groupAdmin || groupChat.groupAdmin.toString() !== currentUserId.toString()) {
                 return res.status(403).json({ message: "Only group admin can add users" });
             }
+            
             const updatedChat = await chat.findByIdAndUpdate(
                 chatId,
                 {
@@ -146,7 +156,10 @@ export class ChatController {
                 { new: true }
             ).populate("users", "-password").populate("groupAdmin", "-password");
 
-            return res.status(200).json({ message: "User added to group chat successfully", chat: updatedChat });
+            return res.status(200).json({ 
+                message: "User added to group chat successfully", 
+                chat: updatedChat 
+            });
 
         } catch (error) {
             console.error("addUserToGroup error:", error);
@@ -154,21 +167,23 @@ export class ChatController {
         }
     }
 
-
     // remove users from group chat
     public removeUsersFromGroupChat = async (req: Request, res: Response): Promise<Response> => {
         try {
-             const { chatId, userId } = req.body;
+            const { chatId, userId } = req.body;
             const currentUserId = req.user?._id;
             if (!currentUserId) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
+            
             // check if the requester is admin
             const havechat = await chat.findById(chatId);
-            if(!havechat){
+            if (!havechat) {
                 return res.status(404).json({ message: "Chat not found" });
             }
-            if (havechat?.groupAdmin?.toString() !== currentUserId.toString()) {
+            
+            // FIXED: Added null check for groupAdmin
+            if (!havechat.groupAdmin || havechat.groupAdmin.toString() !== currentUserId.toString()) {
                 return res.status(403).json({ message: "Only group admin can remove users" });
             }
 
@@ -180,19 +195,16 @@ export class ChatController {
                 { new: true }
             ).populate("users", "-password").populate("groupAdmin", "-password");
 
-            return res.status(200).json({ message: "User removed from group chat successfully", chat: updatechat });
+            return res.status(200).json({ 
+                message: "User removed from group chat successfully", 
+                chat: updatechat 
+            });
 
         } catch (error) {
             console.error("removeUserFromGroup error:", error);
-            return res.status(500).json({ message: "Failed to remove user" });
-
+            return res.status(500).json({ 
+                message: "Failed to remove user" 
+            });
         }
-          
-
     }
-
-
 }
-
-
-

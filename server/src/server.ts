@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 dotenv.config();
-
 import app from "./api/api";
 import connectDb from "./database/configDb";
 
