@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import authRouter from "../routes/auth.routes";
-
+import chatRouter from "../routes/chat.routes";
 const app = express();
 
 app.use(cors());
@@ -13,6 +13,10 @@ app.get("/api/status", (req, res) => {
   res.json({ status: "API is running" });
 });
 
+
+// auth routes
 app.use("/api/auth", authRouter);
 
+//  chat routes
+app.use("/api/chat", chatRouter)
 export default app;
