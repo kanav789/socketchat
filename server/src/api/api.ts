@@ -3,6 +3,7 @@ import cors from "cors";
 
 import authRouter from "../routes/auth.routes";
 import chatRouter from "../routes/chat.routes";
+import messageRouter from "../routes/message.routes";
 const app = express();
 
 app.use(cors());
@@ -18,5 +19,9 @@ app.get("/api/status", (req, res) => {
 app.use("/api/auth", authRouter);
 
 //  chat routes
-app.use("/api/chat", chatRouter)
+app.use("/api/chat", chatRouter);
+
+// message routes
+app.use("/api/message", messageRouter);
+
 export default app;
