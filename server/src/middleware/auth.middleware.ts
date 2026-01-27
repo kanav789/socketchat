@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/user"; 
+import User from "../models/user";
 
 interface JwtPayload {
   id: string;
@@ -31,8 +31,11 @@ const authMiddleware = async (
       return res.status(401).json({ message: "User not found" });
     }
 
-    req.user = {
-      _id: user._id
+    // QUICK FIX: Use type assertion
+    (req as any).user = {
+      _id: user._id.toString(),
+      name: user.name,
+      email: user.email,
     };
 
     next();
