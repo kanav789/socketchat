@@ -1,34 +1,44 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import SignIn from "./components/auth/signIn";
-import SignUp from "./components/auth/signUp";
-import Chat from "./components/chat/chat";
+import { useEffect } from "react";
+import { socket } from "./socket";
 
-const useAuth = () => {
-  const [isAuth, setIsAuth] = useState(false);
-  return { isAuth, login: () => setIsAuth(true), logout: () => setIsAuth(false) };
-};
-const ProtectedRoute = ({ isAuth, children }: any) => {
-  return isAuth ? children : <Navigate to="/signin" replace />;
-};
 export default function App() {
-  const auth = useAuth();
+  const user = {
+    name: "john doe",
+    _id: "sjkjsdkkjk12672618768"
+  };
 
+  useEffect(() => {
+    if (!user) return;
+
+    console.log("his,nsnl")
+
+    socket.connect();
+
+    socket.on("connect", () => {
+      console.log("🔗 Socket connected:", socket.id);
+      socket.emit("message", "hello,world");
+
+      // emit ONLY after connection
+      socket.emit("setup", user);
+    });
+
+    socket.on("connected", () => {
+      console.log("✅ Server acknowledged setup");
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("❌ Socket error:", err.message);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("connected");
+      socket.off("connect_error");
+      socket.disconnect();
+    };
+  }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/signin" element={<SignIn login={auth.login} />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute isAuth={auth.isAuth}>
-              <Chat />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <h1 className="flex justify-center text-4xl capitalize">hello</h1>
   );
 }
