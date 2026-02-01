@@ -4,6 +4,8 @@ import Navbar from "./pages/navbar/navbar";
 import "./App.css"
 import Menu from "./pages/navbar/menu";
 import ListChats from "./pages/listchats/listChats";
+import Chat from "./pages/chat/chat.tsx";
+import ChatDescription from "./components/chatDescription.tsx";
 export default function App() {
   const user = {
     name: "john doe",
@@ -43,9 +45,7 @@ export default function App() {
 
   return (
     <div>
-      <Navbar/>
-      <ListChats/>
-      <Menu/>
+    <ChatDescription/>
 
     </div>
   );
