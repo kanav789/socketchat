@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { socket } from "./socket";
-
+import Navbar from "./pages/navbar/navbar";
+import "./App.css"
+import Menu from "./pages/navbar/menu";
 export default function App() {
   const user = {
     name: "john doe",
@@ -39,6 +41,9 @@ export default function App() {
   }, []);
 
   return (
-    <h1 className="flex justify-center text-4xl capitalize">hello</h1>
+    <div>
+      <Navbar/>
+      <Menu/>
+    </div>
   );
 }
