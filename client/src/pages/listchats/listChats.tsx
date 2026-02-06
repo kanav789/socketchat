@@ -1,4 +1,5 @@
 import { BsPinAngleFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 const ListChats = () => {
     const dummyChats = [
@@ -122,6 +123,14 @@ const ListChats = () => {
         }
     ];
 
+    const Navigate = useNavigate();
+
+
+    const gotochat = (id:number) => {
+            Navigate(`/chat/${id}/V1/892737`);
+       console.log("Go to chat with id:", id);
+    }
+
     return (
         <div className="px-3">
             <h2 className="text-xl font-semibold mb-4">List of Chats</h2>
@@ -129,8 +138,10 @@ const ListChats = () => {
             {/* map through chats */}
             <div className="space-y-2">
                 {dummyChats.map((chat) => (
-                    <div 
+              
+                         <div 
                         key={chat.id}
+                        onClick={() => gotochat(chat.id)}
                         className="w-full border-gray-300 border rounded-lg p-3 hover:bg-gray-50 cursor-pointer transition-colors"
                     >
                         <div className="flex items-center justify-between">
@@ -160,7 +171,9 @@ const ListChats = () => {
                             </div>
                         </div>
                     </div>
-                ))}
+               
+             
+               ))}
             </div>
         </div>
     )

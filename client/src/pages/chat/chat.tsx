@@ -2,6 +2,7 @@ import { IoSend } from 'react-icons/io5';
 import { BsEmojiSmile, BsPaperclip } from 'react-icons/bs';
 import { HiDotsVertical } from 'react-icons/hi';
 import { IoMdArrowBack } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
     const dummyMessages = [
@@ -150,13 +151,13 @@ const Chat = () => {
             isSent: true
         }
     ];
-
+  const navigate = useNavigate();
     return (
         <div className="flex flex-col h-screen bg-gray-50">
             {/* Header */}
             <div className="bg-white border-b border-gray-300 px-4 py-3 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-3">
-                    <button className="text-gray-600 hover:text-gray-900">
+                    <button className="text-gray-600 hover:text-gray-900 cursor-pointer" onClick={()=> navigate("/")}>
                         <IoMdArrowBack className="text-2xl" />
                     </button>
                     <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
@@ -206,7 +207,7 @@ const Chat = () => {
                     placeholder="Type a message..."
                     className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
-                <button className="bg-green-500 text-white rounded-full p-2 hover:bg-green-600 transition-colors">
+                <button className="bg-green-500 text-white rounded-full p-2 hover:bg-green-600 transition-colors cusrsor-pointer">
                     <IoSend className="text-xl" />
                 </button>
             </div>

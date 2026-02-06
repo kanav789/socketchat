@@ -1,7 +1,9 @@
-const Home =() =>{
-    return(
-        <div>
+import ListChats from "../listchats/listChats";
 
+const Home = () => {
+    return (
+        <div>
+            <ListChats/>
         </div>
     )
 }

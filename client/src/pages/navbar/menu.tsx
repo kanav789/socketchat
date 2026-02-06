@@ -1,7 +1,7 @@
 import { IoChatbubbles } from 'react-icons/io5';
 import { MdCall } from 'react-icons/md';
-import { IoLogoWhatsapp } from 'react-icons/io';
-import { FaTools } from 'react-icons/fa';
+import { CiSettings } from 'react-icons/ci';
+import { FaUserSecret } from 'react-icons/fa';
 
 const Menu = () => {
     return (
@@ -16,19 +16,20 @@ const Menu = () => {
                 <span className="text-xs">Chats</span>
             </button>
             
+            
+            <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-gray-900 transition-colors">
+                <FaUserSecret className="text-2xl" />
+                <span className="text-xs">All Users</span>
+            </button>
+
             <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-gray-900 transition-colors">
                 <MdCall className="text-2xl" />
                 <span className="text-xs">Calls</span>
             </button>
             
             <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-gray-900 transition-colors">
-                <IoLogoWhatsapp className="text-2xl" />
-                <span className="text-xs">Updates</span>
-            </button>
-            
-            <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-gray-900 transition-colors">
-                <FaTools className="text-2xl" />
-                <span className="text-xs">Tools</span>
+                <CiSettings className="text-2xl" />
+                <span className="text-xs">Settings</span>
             </button>
         </div>
     )
