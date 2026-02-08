@@ -48,8 +48,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // network error (no response)
+    if (!error.response) {
+      console.error("Network error or server down");
+    }
     const status = error?.response?.status;
-
     // token invalid / expired
     if (status === 401 || status === 403) {
       redirectToLogin();
