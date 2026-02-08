@@ -13,6 +13,16 @@ const authMiddleware = async (
 ) => {
   try {
     const authHeader = req.headers.authorization;
+    const apiKeyHeader = req.headers["x-api-key"];
+
+    // Check for API key first
+    if (apiKeyHeader) {
+      if (apiKeyHeader === process.env.API_KEY) {
+        return next();
+      } else {
+        return res.status(401).json({ message: "Invalid API key" });
+      }
+    }
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "No token provided" });
