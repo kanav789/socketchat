@@ -1,7 +1,11 @@
 import { BsPinAngleFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import useApi from '../../utility/customHooksApip';
+import ApiUrl from '../../utility/apiUrl/apiUrl';
+import { useEffect } from 'react';
 
 const ListChats = () => {
+    const {request,error} =useApi();
     const dummyChats = [
         {
             id: 1,
@@ -129,6 +133,13 @@ const ListChats = () => {
     const gotochat = (id:number) => {
             Navigate(`/chat/${id}/V1/892737`);
        console.log("Go to chat with id:", id);
+    }
+
+    useEffect(()=>{
+        allchats();
+    },[])
+    const allchats =async()=>{
+        await request(ApiUrl?.chats?.getAllChats, "get")
     }
 
     return (

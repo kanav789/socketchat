@@ -3,7 +3,6 @@ import axios from "axios";
 // ===== CONFIG =====
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // or process.env.REACT_APP_API_BASE_URL
 const API_KEY = import.meta.env.VITE_API_KEY;
-
 const LOGIN_ROUTE = "/login";
 
 // ===== AXIOS INSTANCE =====
@@ -33,7 +32,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     } else {
       // no token → redirect
-      redirectToLogin();
+      // redirectToLogin();
       return Promise.reject(new Error("No auth token"));
     }
 
@@ -55,7 +54,7 @@ api.interceptors.response.use(
     const status = error?.response?.status;
     // token invalid / expired
     if (status === 401 || status === 403) {
-      redirectToLogin();
+      // redirectToLogin();
     }
 
     return Promise.reject(error);
